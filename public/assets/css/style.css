@@ -1,0 +1,18 @@
+.dataTables_info {
+    margin-left: 10px;
+}
+
+.dataTables_filter{
+    margin-right: 10px;
+}
+
+.add-bnt {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    z-index: 1;
+}
+
+.user-photo {
+    width: 50px;
+}
