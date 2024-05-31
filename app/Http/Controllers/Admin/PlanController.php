@@ -22,7 +22,7 @@ class PlanController extends Controller
             ->get()
             ->toArray();
 
-        return view('admin.plan.index', compact('plans'));
+        return view('admin.plan.index', compact('plans', 'courseId'));
     }
 
     public function getPlans()

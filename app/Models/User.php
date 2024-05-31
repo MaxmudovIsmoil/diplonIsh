@@ -59,7 +59,7 @@ class User extends Authenticatable
     public function getPhotoAttribute()
     {
         return $this->attributes['photo']
-            ? asset("storage/upload/photos/" . $this->attributes['photo'])
+            ? asset("storage/upload/photo/" . $this->attributes['photo'])
             : asset('assets/images/no-user.png');
     }
 

@@ -9,28 +9,6 @@
         </div>
 
         <ul class="nav navbar-nav align-items-center ml-auto">
-{{--            <li class="nav-item dropdown dropdown-language">--}}
-{{--                <a class="nav-link dropdown-toggle" id="dropdown-flag" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
-{{--                    @if(App::isLocale('ru'))--}}
-{{--                        <i class="flag-icon flag-icon-ru"></i><span class="selected-language">Russian</span>--}}
-{{--                    @elseif(App::isLocale('en'))--}}
-{{--                        <i class="flag-icon flag-icon-us"></i><span class="selected-language">English</span>--}}
-{{--                    @else--}}
-{{--                        <i class="flag-icon flag-icon-uz"></i><span class="selected-language">Uzbek</span>--}}
-{{--                    @endif--}}
-{{--                </a>--}}
-{{--                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-flag">--}}
-{{--                    <a class="dropdown-item @if(App::isLocale('ru')) active @endif" href="{{ route('locale', ['ru']) }}" data-language="ru">--}}
-{{--                        <i class="flag-icon flag-icon-ru"></i> Russian--}}
-{{--                    </a>--}}
-{{--                    <a class="dropdown-item @if(App::isLocale('en')) active @endif" href="{{ route('locale', ['en']) }}" data-language="en">--}}
-{{--                        <i class="flag-icon flag-icon-us"></i> English--}}
-{{--                    </a>--}}
-{{--                    <a class="dropdown-item @if(App::isLocale('uz')) active @endif" href="{{ route('locale', ['uz']) }}" data-language="ru">--}}
-{{--                        <i class="flag-icon flag-icon-uz"></i> Uzbek--}}
-{{--                    </a>--}}
-{{--                </div>--}}
-{{--            </li>--}}
             <li class="nav-item d-none d-lg-block">
                 <a class="nav-link nav-link-style1" id="theme-toggle">
                     <i id="theme-icon" class="ficon fas fa-sun"></i>
@@ -97,7 +75,7 @@
                         <i data-feather="users"></i> Users
                     </a>
                 </li>
-                <li class="nav-item @if (Request::segment(2) === 'course') active @endif">
+                <li class="nav-item @if (in_array(Request::segment(2), ['course', 'plan', 'content'])) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('admin.course.index') }}">
                         <i data-feather="grid"></i> Kurslar
                     </a>

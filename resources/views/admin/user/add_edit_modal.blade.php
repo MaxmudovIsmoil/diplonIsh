@@ -43,7 +43,7 @@
                                     <option value="1">{{__("admin.Active")}}</option>
                                     <option value="0">{{__("admin.No active")}}</option>
                                 </select>
-                                <div class="invalid-feedback">status fail!</div>
+                                <div class="invalid-feedback">Status fail!</div>
                             </div>
                         </div>
                         <div class="col-md-6">

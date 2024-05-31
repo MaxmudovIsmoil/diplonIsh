@@ -6,12 +6,16 @@
     <div class="content-wrapper">
         <div class="content-header row"></div>
         <div class="content-body position-relative">
-            <div class="form-modal-ex add-bnt">
+            <div class="form-modal-ex add-bnt d-flex">
                 <!-- add btn click show modal -->
+                <a href="{{ route('admin.course.index') }}" class="btn btn-outline-secondary mr-2">
+                    <i class="fas fa-arrow-left"></i>&nbsp; Orqaga
+                </a>
                 <a href="javascript:void(0);" data-store_url="{{ route('admin.plan.store') }}"
                    class="btn btn-outline-primary js_add_btn">
                     <i data-feather="plus"></i>&nbsp; Reja qo'shish
                 </a>
+                <h3 class="text-center ml-5" style="margin-top: 5px;">Kurs: {{ \App\Models\Course::findOrFail($courseId)->name }}</h3>
             </div>
             <!-- Multilingual -->
             <section id="multilingual-datatable">
@@ -25,6 +29,7 @@
                                             <th>№</th>
                                             <th>Kurs</th>
                                             <th>Reja nomi</th>
+                                            <th>Content</th>
                                             <th>Status</th>
                                             <th class="text-right">Harakat</th>
                                         </tr>
@@ -35,7 +40,10 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $plan['title'] }}</td>
                                                 <td>{{ $plan['text'] }}</td>
-                                                <td>{{ $plan['status'] }}</td>
+                                                <td>
+                                                    <a href="{{ route('admin.content.index', $plan['id']) }}" class="btn btn-outline-primary">Content</a>
+                                                </td>
+                                                <td>@if($plan['status'] == 1) Faol @else No faol @endif</td>
                                                 <td>
                                                     <div class="text-right">
                                                         <a href="javascript:void(0);" class="text-primary js_edit_btn mr-3"
@@ -140,7 +148,7 @@
                         form.prepend("<input type='hidden' name='_method' value='PUT'>");
                         if (response.success) {
 
-                            form.find('.js_name').val(response.data.name)
+                            form.find('.js_title').val(response.data.title)
                             form.find('.js_text').val(response.data.text)
                             $.each(status, function (i, item) {
                                 if (response.data.status === $(item).val()) {
@@ -158,7 +166,7 @@
 
             $(document).on('submit', '.js_add_edit_form', function (e) {
                 e.preventDefault();
-                let name = form.find('.js_name');
+                let name = form.find('.js_title');
                 let text = form.find('.js_text');
 
                 $.ajax({
@@ -173,15 +181,15 @@
                         if (response.success) {
                             modal.modal('hide')
                             form_clear(form)
-                            table.draw();
+                            window.location.reload();
                         }
                     },
                     error: (response) => {
 
                         if (typeof response.responseJSON.errors !== 'undefined') {
-                            if (response.responseJSON.errors.name) {
-                                name.addClass('is-invalid');
-                                name.siblings('.invalid-feedback').html(response.responseJSON.errors.name[0]);
+                            if (response.responseJSON.errors.title) {
+                                title.addClass('is-invalid');
+                                title.siblings('.invalid-feedback').html(response.responseJSON.errors.title[0]);
                             }
                             if (response.responseJSON.errors.text) {
                                 text.addClass('is-invalid');
@@ -207,7 +215,22 @@
 
             $(document).on('submit', '#js_modal_delete_form', function (e) {
                 e.preventDefault()
-                delete_function(deleteModal, $(this), table);
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: (response) => {
+                        if(!response.success) {
+                            console.log('res', response);
+                        }
+                        if(response.success) {
+                            window.location.reload();
+                        }
+                    },
+                    error: (response) => {
+                        console.log('error:', response);
+                    }
+                });
             });
         });
     </script>

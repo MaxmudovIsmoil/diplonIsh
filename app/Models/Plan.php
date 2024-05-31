@@ -13,7 +13,7 @@ class Plan extends Model
     protected $fillable = [
         'course_id',
         'title',
-        'test',
+        'text',
         'status',
         'deleted_at',
     ];

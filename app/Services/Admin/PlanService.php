@@ -54,8 +54,9 @@ class PlanService
     public function create(array $data): bool
     {
         Plan::create([
-            'name' => $data['name'],
-            'text' => '',
+            'course_id' => $data['course_id'],
+            'title' => $data['title'],
+            'text' => $data['text'],
             'status' => $data['status'],
         ]);
 
@@ -66,7 +67,8 @@ class PlanService
     {
         $user = Plan::findOrfail($id);
         $user->fill([
-            'name' => $data['name'],
+            'title' => $data['title'],
+            'text' => $data['text'],
             'status' => $data['status'],
         ]);
         $user->save();

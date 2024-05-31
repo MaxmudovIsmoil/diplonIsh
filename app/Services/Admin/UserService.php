@@ -86,7 +86,7 @@ class UserService
         DB::beginTransaction();
             $user = User::findOrfail($id);
             if (isset($data['photo'])) {
-                $this->fileDelete('photos/'.$user->photo);
+                $this->fileDelete('photo/'.$user->photo);
                 $user->fill(['photo' => $this->fileUpload($data['photo'])]);
             }
             if (isset($data['password'])) {
@@ -107,7 +107,7 @@ class UserService
     public function delete(int $id)
     {
         $user = User::findOrFail($id);
-        $this->fileDelete('photos/' . $user->photo);
+        $this->fileDelete('photo/' . $user->photo);
         return $user->delete();
     }
 

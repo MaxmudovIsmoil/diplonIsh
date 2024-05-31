@@ -7,12 +7,16 @@
     <div class="content-wrapper">
         <div class="content-header row"></div>
         <div class="content-body position-relative">
-            <div class="form-modal-ex add-bnt">
+            <div class="form-modal-ex add-bnt d-flex">
                 <!-- add btn click show modal -->
-                <a href="javascript:void(0);" data-store_url="{{ route('admin.user.store') }}"
+                <a href="{{ route('admin.plan.index', $planId) }}" class="btn btn-outline-secondary mr-2">
+                    <i class="fas fa-arrow-left"></i>&nbsp; Orqaga
+                </a>
+                <a href="javascript:void(0);" data-store_url="{{ route('admin.content.store') }}"
                    class="btn btn-outline-primary js_add_btn">
                     <i data-feather="plus"></i>&nbsp; Qo'shish
                 </a>
+                <h3 class="text-center ml-5" style="margin-top: 5px;">Reja: {{ \App\Models\Plan::findOrFail($planId)->title }}</h3>
             </div>
             <!-- Multilingual -->
             <section id="multilingual-datatable">
@@ -24,13 +28,47 @@
                                     <thead>
                                     <tr>
                                         <th>№</th>
-                                        <th>Kusr nomi</th>
+                                        <th>Video</th>
                                         <th>Text</th>
-                                        <th>Status</th>
+                                        <th>Photo</th>
                                         <th class="text-right">Harakat</th>
                                     </tr>
                                     </thead>
-                                    <tbody></tbody>
+                                    <tbody>
+                                        @foreach($contents as $content)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>
+                                                    @if(!empty($content['url']))
+                                                        <div class="video-player">
+                                                            <iframe src="{{ $content['url'] }}" allowfullscreen allow="autoplay"></iframe>
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                                <td>{!! $content['text'] !!}</td>
+                                                <td>
+                                                    <img src="{{ asset('storage/upload/photo/'.$content['photo']) }}" alt="Photo" style="width: 40px;">
+                                                </td>
+                                                <td>
+                                                    <div class="text-right">
+                                                        <a href="javascript:void(0);" class="text-primary js_edit_btn mr-3"
+                                                           data-update_url="{{ route('admin.content.update', $content['id']) }}"
+                                                           data-one_data_url="{{ route('admin.content.getOne', $content['id'])}}"
+                                                           title="Tahrirlash">
+                                                            <i class="fas fa-pen mr-50"></i>
+                                                        </a>
+                                                        <a class="text-danger js_delete_btn" href="javascript:void(0);"
+                                                           data-toggle="modal"
+                                                           data-target="#deleteModal"
+                                                           data-name="{{$content['text']}}"
+                                                           data-url="{{ route('admin.content.destroy', $content['id']) }}" title="O\'chitish">
+                                                            <i class="far fa-trash-alt mr-50"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -38,7 +76,7 @@
                 </div>
             </section>
             <!--/ Multilingual -->
-            @include('admin.course.add_edit_modal')
+            @include('admin.content.add_edit_modal')
         </div>
     </div>
 @endsection
@@ -46,16 +84,10 @@
 @section('script')
     <script>
         function form_clear(form) {
-            form.find('.js_name').val('')
-            form.find('.js_phone').val('')
-            form.find('.js_username').val('')
-            form.find('.js_password').val('')
-            form.find('.js_photo').val('')
-            let status = form.find('.js_status option');
-            $.each(status, function (i, item) {
-                $(item).removeAttr('selected');
-            });
-            form.find('.js_instance').val(null).trigger('change')
+            form.find('.js_url').val('');
+            form.find('.js_photo').val('');
+            form.find('.js_video').val('');
+            form.find('.js_text').val('');
         }
 
         $(document).ready(function () {
@@ -63,7 +95,7 @@
             var deleteModal = $('#deleteModal')
             var form = modal.find('.js_add_edit_form');
 
-            var table = $('#datatable').DataTable({
+            $('#datatable').DataTable({
                 paging: true,
                 pageLength: 20,
                 lengthChange: false,
@@ -84,27 +116,14 @@
                         sPrevious: "Oldingi",
                     },
                 },
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    "url": '{{ route("admin.getUsers") }}',
-                },
-                columns: [
-                    {data: 'DT_RowIndex'},
-                    {data: 'photo'},
-                    {data: 'name'},
-                    {data: 'phone'},
-                    {data: 'username'},
-                    {data: 'status'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false}
-                ]
+                processing: false,
+                serverSide: false,
             });
 
-            $('.js_instance').select2();
 
             $(document).on('click', '.js_add_btn', function (e) {
                 e.preventDefault();
-                modal.find('.modal-title').html('{{__("admin.Add user")}}')
+                modal.find('.modal-title').html("Qo'shish");
                 form_clear(form);
                 let url = $(this).data('store_url');
                 form.attr('action', url);
@@ -114,34 +133,28 @@
 
             $(document).on('click', '.js_edit_btn', function (e) {
                 e.preventDefault();
-                modal.find('.modal-title').html('{{__("admin.Edit user")}}')
-                let status = form.find('.js_status option')
-                let url = $(this).data('one_data_url')
-                let update_url = $(this).data('update_url')
+                modal.find('.modal-title').html('Taxrirlash');
+                let url = $(this).data('one_data_url');
+                let update_url = $(this).data('update_url');
                 form.attr('action', update_url)
                 form_clear(form);
-
+                console.log('123')
                 $.ajax({
                     url: url,
                     type: "GET",
                     dataType: "json",
                     success: (response) => {
+                        console.log('error: ',response);
                         form.prepend("<input type='hidden' name='_method' value='PUT'>");
                         if (response.success) {
-
-                            form.find('.js_name').val(response.data.name)
-                            form.find('.js_phone').val(response.data.phone)
-                            form.find('.js_username').val(response.data.username)
-                            $.each(status, function (i, item) {
-                                if (response.data.status === $(item).val()) {
-                                    $(item).attr('selected', true);
-                                }
-                            })
-                            modal.modal('show')
+                            form.find('.js_text').val(response.data.text);
+                            form.find('.js_url').val(response.data.url);
+                            modal.modal('show');
                         }
+
                     },
                     error: (response) => {
-                        // console.log('error: ',response)
+                        console.log('error: ',response);
                     }
                 });
             })
@@ -149,11 +162,10 @@
             $(document).on('submit', '.js_add_edit_form', function (e) {
                 e.preventDefault();
                 let instance = form.find('.js_instance');
-                let name = form.find('.js_name')
-                let phone = form.find('.js_phone')
-                let photo = form.find('.js_photo')
-                let username = form.find('.js_username')
-                let password = form.find('.js_password')
+                let text = form.find('.js_text');
+                let photo = form.find('.js_photo');
+                let video = form.find('.js_video');
+                let url = form.find('.js_url');
 
                 $.ajax({
                     url: $(this).attr('action'),
@@ -163,41 +175,34 @@
                     processData: false,
                     contentType: false,
                     success: (response) => {
-                        // console.log(response)
+                        console.log(response)
                         if (response.success) {
                             modal.modal('hide')
                             form_clear(form)
-                            table.draw();
+                            window.location.reload();
                         }
                     },
                     error: (response) => {
-                        if (typeof response.responseJSON.error !== 'undefined') {
-                            instance.addClass('is-invalid');
-                            instance.siblings('.invalid-feedback').html('{{ __('Admin.instance_fail') }}');
-                        }
-                        if (typeof response.responseJSON.errors !== 'undefined') {
-                            if (response.responseJSON.errors.name) {
-                                name.addClass('is-invalid');
-                                name.siblings('.invalid-feedback').html(response.responseJSON.errors.name[0]);
-                            }
-                            if (response.responseJSON.errors.phone) {
-                                phone.addClass('is-invalid');
-                                phone.siblings('.invalid-feedback').html(response.responseJSON.errors.phone[0]);
-                            }
-                            if (response.responseJSON.errors.username) {
-                                username.addClass('is-invalid');
-                                username.siblings('.invalid-feedback').html(response.responseJSON.errors.username[0]);
-                            }
-                            if (response.responseJSON.errors.password) {
-                                password.addClass('is-invalid');
-                                password.siblings('.invalid-feedback').html(response.responseJSON.errors.password[0]);
-                            }
-                            if (response.responseJSON.errors.photo) {
-                                photo.addClass('is-invalid');
-                                photo.siblings('.invalid-feedback').html(response.responseJSON.errors.photo[0]);
-                            }
-                        }
                         console.log('error: ', response);
+                        // if (typeof response.responseJSON.errors !== 'undefined') {
+                        //     if (response.responseJSON.errors.text) {
+                        //         text.addClass('is-invalid');
+                        //         text.siblings('.invalid-feedback').html(response.responseJSON.errors.text[0]);
+                        //     }
+                        //     if (response.responseJSON.errors.video) {
+                        //         video.addClass('is-invalid');
+                        //         video.siblings('.invalid-feedback').html(response.responseJSON.errors.video[0]);
+                        //     }
+                        //     if (response.responseJSON.errors.photo) {
+                        //         photo.addClass('is-invalid');
+                        //         photo.siblings('.invalid-feedback').html(response.responseJSON.errors.photo[0]);
+                        //     }
+                        //     if (response.responseJSON.errors.url) {
+                        //         url.addClass('is-invalid');
+                        //         url.siblings('.invalid-feedback').html(response.responseJSON.errors.url[0]);
+                        //     }
+                        // }
+
                     }
                 });
             });
@@ -207,7 +212,7 @@
                 let name = $(this).data('name')
                 let url = $(this).data('url')
 
-                deleteModal.find('.modal-title').html(name)
+                deleteModal.find('.modal-title').html(name);
 
                 let form = deleteModal.find('#js_modal_delete_form')
                 form.attr('action', url)
@@ -216,7 +221,24 @@
 
             $(document).on('submit', '#js_modal_delete_form', function (e) {
                 e.preventDefault()
-                delete_function(deleteModal, $(this), table);
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: (response) => {
+                        if(!response.success) {
+                            deleteModal.find('.js_message').addClass('d-none')
+                            deleteModal.find('.js_danger').html(response.error)
+                        }
+                        console.log('res', response)
+                        if(response.success) {
+                            window.location.reload();
+                        }
+                    },
+                    error: (response) => {
+                        console.log('error:', response);
+                    }
+                });
             });
         });
     </script>

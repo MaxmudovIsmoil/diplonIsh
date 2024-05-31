@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 trait FileTrait
 {
 
-    public function fileUpload(object $file, string $path = 'photos'): string
+    public function fileUpload(object $file, string $path = 'photo'): string
     {
         if($file) {
             $fileName = time() . '.' . $file->getClientOriginalExtension();

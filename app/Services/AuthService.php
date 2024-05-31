@@ -38,7 +38,7 @@ class AuthService
         $userId = Auth::id();
         $user = User::findOrfail($userId);
         if (isset($data['photo'])) {
-            $this->fileDelete('photos/'.$user->photo);
+            $this->fileDelete('photo/'.$user->photo);
             $user->fill(['photo' => $this->fileUpload($data['photo'])]);
         }
         if (isset($data['password'])) {

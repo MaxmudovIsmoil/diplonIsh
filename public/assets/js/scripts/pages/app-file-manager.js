@@ -112,7 +112,7 @@ $(function () {
             text: 'My Drive',
             children: [
               {
-                text: 'photos',
+                text: 'photo',
                 children: [
                   {
                     text: 'image-1.jpg',

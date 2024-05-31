@@ -19,13 +19,14 @@ Route::get('/course/one/{id}', [CourseController::class, 'getOne'])->name('cours
 
 
 Route::get('/plan/{courseId}', [PlanController::class, 'index'])->name('plan.index');
-//Route::resource('plan', PlanController::class)->except(['create', 'edit', 'show']);
 Route::post('/plan/create', [PlanController::class, 'store'])->name('plan.store');
 Route::get('/plan/one/{id}', [PlanController::class, 'getOne'])->name('plan.getOne');
-Route::get('/plan/edit/{id}', [PlanController::class, 'update'])->name('plan.update');
+Route::put('/plan/edit/{id}', [PlanController::class, 'update'])->name('plan.update');
 Route::delete('/plan/delete/{id}', [PlanController::class, 'destroy'])->name('plan.destroy');
 
 
-//Route::resource('content', ContentController::class)->except(['create', 'edit', 'show']);
-//Route::get('/contents', [ContentController::class, 'getContents'])->name('getContents');
-//Route::get('/content/one/{id}', [ContentController::class, 'getOne'])->name('plan.getOne');
+Route::get('/content/{planId}', [ContentController::class, 'index'])->name('content.index');
+Route::post('/content/create', [ContentController::class, 'store'])->name('content.store');
+Route::get('/content/one/{id}', [ContentController::class, 'getOne'])->name('content.getOne');
+Route::put('/content/edit/{id}', [ContentController::class, 'update'])->name('content.update');
+Route::delete('/course/delete/{id}', [ContentController::class, 'destroy'])->name('content.destroy');
