@@ -69,10 +69,6 @@
                                     <input type="text" class="form-control" id="name" name="name" aria-describedby="name" tabindex="1" autofocus />
                                 </div>
                                 <div class="form-group">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" aria-describedby="email" tabindex="2" autofocus />
-                                </div>
-                                <div class="form-group">
                                     <label for="phone" class="form-label">Telefon</label>
                                     <input type="text" class="form-control" id="phone" name="phone" aria-describedby="phone" tabindex="3" autofocus />
                                 </div>
