@@ -27,6 +27,11 @@ Route::get('login', function () {
     return view('auth.login');
 });
 
+Route::get('registration', function () {
+    return view('auth.registration');
+})->name('registration');
+Route::post('registration', [AuthController::class, 'registration'])->name('registration.store');
+
 Route::post('login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware(['auth', 'isActive'])->group(function () {

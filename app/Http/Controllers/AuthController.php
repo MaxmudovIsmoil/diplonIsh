@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dto\AuthDto;
 use App\Exceptions\UnauthorizedException;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegistrationRequest;
 use App\Http\Requests\UserProfileRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
@@ -46,6 +47,19 @@ class AuthController extends Controller
         $this->service->logout();
 
         return redirect()->route('login');
+    }
+
+
+    public function registration(RegistrationRequest $request)
+    {
+        try {
+            $this->service->registration($request->validated());
+
+            return redirect()->intended('home');
+        }
+        catch (\Exception $e) {
+            return Redirect::back()->withErrors(['message' => $e->getMessage(), 'code' => $e->getCode()]);
+        }
     }
 
 

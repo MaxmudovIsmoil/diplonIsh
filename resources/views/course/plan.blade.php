@@ -1,4 +1,4 @@
-<section class="vertical-wizard">
+<section class="vertical-wizard mb-0">
     <div class="bs-stepper vertical vertical-wizard-example">
         <div class="bs-stepper-header">
             @foreach($plans as $plan)
@@ -20,6 +20,10 @@
                         @include('course.content')
                     </div>
                 @endforeach
+            @endisset
+
+            @if(!isset($contents))
+                    <img src="{{ asset('assets/images/plan-home.jpg') }}" width="100%" alt="Photo">
             @endisset
         </div>
     </div>

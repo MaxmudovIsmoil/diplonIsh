@@ -54,7 +54,7 @@
                         <div class="card-body">
                             <div>
                                 <img src="{{ asset('assets/images/logo.png') }}" class="rounded mx-auto d-block" width="25%" alt="Logo" />
-                                <h3 class="brand-text text-primary text-center">{{ config('app.name') }}</h3>
+                                <h3 class="brand-text text-primary text-center">Ro'yhatdan o'tish</h3>
                             </div>
                             @if($errors->any())
                                 <p class="alert alert-danger">{{$errors->first()}}</p>
@@ -62,11 +62,23 @@
                             @if (\Session::has('message'))
                                 <p class="alert alert-warning">{!! \Session::get('message') !!}</p>
                             @endif
-                            <form class="auth-login-form mt-2" action="{{ route('login') }}" method="POST">
+                            <form class="auth-login-form mt-2" action="{{ route('registration.store') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
+                                    <label for="name" class="form-label">Ism familiya</label>
+                                    <input type="text" class="form-control" id="name" name="name" aria-describedby="name" tabindex="1" autofocus />
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" aria-describedby="email" tabindex="2" autofocus />
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">Telefon</label>
+                                    <input type="text" class="form-control" id="phone" name="phone" aria-describedby="phone" tabindex="3" autofocus />
+                                </div>
+                                <div class="form-group">
                                     <label for="login" class="form-label">Login</label>
-                                    <input type="text" class="form-control" id="login" name="username" aria-describedby="login" tabindex="1" autofocus />
+                                    <input type="text" class="form-control" id="login" name="username" aria-describedby="login" tabindex="4" autofocus />
                                 </div>
 
                                 <div class="form-group">
@@ -74,7 +86,19 @@
                                         <label for="login-password">Parol</label>
                                     </div>
                                     <div class="input-group input-group-merge form-password-toggle">
-                                        <input type="password" class="form-control form-control-merge" id="login-password" name="password" tabindex="2" />
+                                        <input type="password" class="form-control form-control-merge" id="login-password" name="password" tabindex="5" />
+                                        <div class="input-group-append">
+                                            <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-between">
+                                        <label for="confirm-password">Parol qayta kitiring</label>
+                                    </div>
+                                    <div class="input-group input-group-merge form-password-toggle">
+                                        <input type="password" class="form-control form-control-merge" id="confirm-password" name="password_confirmation" tabindex="6" />
                                         <div class="input-group-append">
                                             <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
                                         </div>
@@ -85,9 +109,8 @@
                             </form>
 
                         </div>
-                        <a href="{{ route('registration') }}" class="text-center mb-1">Ro'yhatdan o'tish</a>
+                        <a href="{{ route('login') }}" class="text-center mb-1">Kirish oynasi</a>
                     </div>
-
                     <!-- /Login v1 -->
                 </div>
             </div>

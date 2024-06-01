@@ -33,6 +33,21 @@ class AuthService
         Auth::logout();
     }
 
+    public function registration(array $data): bool
+    {
+        $user = User::create([
+            'name' => $data['name'],
+            'phone' => $data['phone'],
+            'email' => $data['email'],
+            'username' => $data['username'],
+            'password' => $data['password']
+        ]);
+
+        Auth::login($user);
+
+        return true;
+    }
+
     public function profile(array $data)
     {
         $userId = Auth::id();
