@@ -9,6 +9,6 @@
     <p class="text-justify mt-2">{!! $content['text'] !!}</p>
 
     @if($content['photo'])
-        <img src="{{ asset('storage/photo/'.$content['photo']) }}" alt="Photo" width="100%" srcset="">
+        <img src="{{ asset('storage/upload/photo/'.$content['photo']) }}" alt="Photo" width="100%" srcset="">
     @endif
 </div>
