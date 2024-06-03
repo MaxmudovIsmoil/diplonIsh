@@ -22,7 +22,7 @@ class ContentService
 
         $videoName = '';
         if (!empty($data['video'])) {
-            $videoName = $this->fileUpload($data['photo'],'video');
+            $videoName = $this->fileUpload($data['video'],'video');
         }
 
         Content::create([
@@ -40,12 +40,15 @@ class ContentService
     {
         $user = Content::findOrfail($id);
 
-        if (!empty($data['video']))
-            $user->fill(['video' => $data['video']]);
+        if (!empty($data['video'])) {
+            $videoName = $this->fileUpload($data['video'],'video');
+            $user->fill(['video' => $videoName]);
+        }
 
-        if (!empty($data['photo']))
-            $user->fill(['photo' => $data['photo']]);
-
+        if (!empty($data['photo'])) {
+            $photoName = $this->fileUpload($data['photo']);
+            $user->fill(['photo' => $photoName]);
+        }
         if (!empty($data['url']))
             $user->fill(['url' => $data['url']]);
 
