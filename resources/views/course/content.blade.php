@@ -8,7 +8,7 @@
 
     <p class="text-justify mt-2">{!! $content['text'] !!}</p>
 
-    @if($content['photo'])
+    @if(isset($content['photo']) && $content['photo'] != '')
         <img src="{{ asset('storage/upload/photo/'.$content['photo']) }}" alt="Photo" width="100%" srcset="">
     @endif
 </div>
