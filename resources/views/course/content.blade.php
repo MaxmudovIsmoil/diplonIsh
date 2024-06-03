@@ -1,6 +1,6 @@
 <div class="content-header">
     <h4 class="text-center text-primary">{{ $content['text'] }}</h4>
-    @if($content['url'])
+    @if(isset($content['url']) && $content['url'] != '')
         <div class="video-player">
             <iframe src="{{ $content['url'] }}" allowfullscreen allow="autoplay"></iframe>
         </div>
